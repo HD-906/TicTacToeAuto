@@ -1,6 +1,6 @@
 def play():
     from random import random
-    brd = ([' ']*3,) + ([' ']*3,) + ([' ']*3,)
+    brd = ([' '] * 3,) + ([' '] * 3,) + ([' '] * 3,)
     res = 'Nobody'
     fin = False
     turn, not_turn = 'X', 'O'
@@ -13,7 +13,7 @@ def play():
                  \n-╋-╋-\
                  \n4┃5┃6\
                  \n-╋-╋-\
-                 \n7┃8┃9'\
+                 \n7┃8┃9' \
                   )
         while True:
             if x1 != 0 and x1 != 1:
@@ -55,10 +55,10 @@ def play():
                     if x not in range(10):
                         print('There is no such position')
                         print('Positions are represented as shown above')
-                    elif brd[x//3][x%3] != ' ':
+                    elif brd[x // 3][x % 3] != ' ':
                         print('That position is already occupied')
                     else:
-                        x = (x//3, x%3)
+                        x = (x // 3, x % 3)
                         break
                 except:
                     print('Position is not recognised')
@@ -91,7 +91,7 @@ def play():
                 \n-╋-╋-\
                 \n{brd[1][0]}┃{brd[1][1]}┃{brd[1][2]}\
                 \n-╋-╋-\
-                \n{brd[2][0]}┃{brd[2][1]}┃{brd[2][2]}'\
+                \n{brd[2][0]}┃{brd[2][1]}┃{brd[2][2]}' \
               )
     print(f'{res} Wins!')
     try:
@@ -101,20 +101,21 @@ def play():
         return play()
     print('game ended')
 
+
 #################################### ai play ###################################
 
-def aiplay(brd_cond = ([' ']*3,) + ([' ']*3,) + ([' ']*3,), turn = 0):
+def aiplay(brd_cond=([' '] * 3,) + ([' '] * 3,) + ([' '] * 3,), turn=0):
     p = brd_cond
-#---------------------------------------------------------- Check if input is valid
+    # ---------------------------------------------------------- Check if input is valid
     for i in range(3):
-        if p[i][0] == p[i][1] == p[i][2] != ' '\
-        or p[0][i] == p[1][i] == p[2][i] != ' ':
+        if p[i][0] == p[i][1] == p[i][2] != ' ' \
+                or p[0][i] == p[1][i] == p[2][i] != ' ':
             return []
-    if p[0][0] == p[1][1] == p[2][2] != ' '\
-    or p[0][2] == p[1][1] == p[2][0] != ' '\
-    or ' ' not in p[0] + p[1] + p[2]:
+    if p[0][0] == p[1][1] == p[2][2] != ' ' \
+            or p[0][2] == p[1][1] == p[2][0] != ' ' \
+            or ' ' not in p[0] + p[1] + p[2]:
         return []
-#---------------------------------------------------------- Assigns turns if needed
+    # ---------------------------------------------------------- Assigns turns if needed
     if not (turn == 'X' or turn == 'O'):
         x = o = 0
         for i in brd_cond:
@@ -131,7 +132,7 @@ def aiplay(brd_cond = ([' ']*3,) + ([' ']*3,) + ([' ']*3,), turn = 0):
         not_turn = 'O'
     else:
         not_turn = 'X'
-#------------------------------------------------------ Finds immediate and play
+    # ------------------------------------------------------ Finds immediate and play
     dang = 0
     for i in range(3):
         t = nt = em = loc = count = 0
@@ -195,16 +196,16 @@ def aiplay(brd_cond = ([' ']*3,) + ([' ']*3,) + ([' ']*3,), turn = 0):
             loc = count
     if em == 1 and (t == 2 or nt == 2):
         return [(loc, 2 - loc)]
-#------------------------------------------------------ Plays double kills position
+    # ------------------------------------------------------ Plays double kills position
     res = gen_win(brd_cond, turn)
     if res:
         return res
-#------------------------------------------------------ Deals with potential double kills positions
+    # ------------------------------------------------------ Deals with potential double kills positions
     pos_win = []
     pos_unk = []
     loses = False
-    for i in range( len(brd_cond) ):
-        for j in range( len(brd_cond[i]) ):
+    for i in range(len(brd_cond)):
+        for j in range(len(brd_cond[i])):
             if brd_cond[i][j] == ' ':
                 brd_cond_dup = duplicate(brd_cond)
                 brd_cond_dup[i][j] = turn
@@ -219,13 +220,13 @@ def aiplay(brd_cond = ([' ']*3,) + ([' ']*3,) + ([' ']*3,), turn = 0):
                         brd_cond_dup[res[0][0]][res[0][1]] = t_turn
                 if res or gen_win(brd_cond_dup, t_turn):
                     if t_turn == turn:
-                        pos_win.append((i,j))
+                        pos_win.append((i, j))
                     else:
                         continue
-#-------------------------------------------------------- check for not_turn
+                # -------------------------------------------------------- check for not_turn
                 loses = False
-                for n in range( len(brd_cond_dup) ):
-                    for m in range( len(brd_cond_dup[n]) ):
+                for n in range(len(brd_cond_dup)):
+                    for m in range(len(brd_cond_dup[n])):
                         if brd_cond_dup[n][m] == ' ':
                             brd_cond_dup2 = duplicate(brd_cond_dup)
                             brd_cond_dup2[n][m] = not_turn
@@ -245,11 +246,12 @@ def aiplay(brd_cond = ([' ']*3,) + ([' ']*3,) + ([' ']*3,), turn = 0):
                     if loses:
                         break
                 if not loses:
-                    pos_unk.append((i,j))
+                    pos_unk.append((i, j))
     if pos_win:
         return pos_win
     else:
         return pos_unk
+
 
 def find_immediate(p, turn):
     if turn == 'X':
@@ -281,34 +283,36 @@ def find_immediate(p, turn):
     nt = em = loc = count = 0
     for u in (p[0][0], p[1][1], p[2][2]):
         if u == turn:
-                nt += 1
-                count += 1
+            nt += 1
+            count += 1
         elif u == ' ':
-                em += 1
-                loc = count
+            em += 1
+            loc = count
     if em == 1 and nt == 2:
-            return [(loc, loc)]
+        return [(loc, loc)]
     nt = em = loc = count = 0
     for u in (p[0][2], p[1][1], p[2][0]):
         if u == turn:
-                nt += 1
-                count += 1
+            nt += 1
+            count += 1
         elif u == ' ':
-                em += 1
-                loc = count
+            em += 1
+            loc = count
     if em == 1 and nt == 2:
         return [(loc, 2 - loc)]
 
+
 def gen_win(brd_cond, turn):
     res_set = []
-    for i in range( len(brd_cond) ):
-        for j in range( len(brd_cond[i]) ):
+    for i in range(len(brd_cond)):
+        for j in range(len(brd_cond[i])):
             if brd_cond[i][j] == ' ':
                 brd_cond[i][j] = turn
                 if win_exists(brd_cond, turn):
                     res_set.append((i, j))
                 brd_cond[i][j] = ' '
     return res_set
+
 
 def win_exists(p, turn):
     num = 0
@@ -355,10 +359,13 @@ def win_exists(p, turn):
     else:
         return False
 
+
 def duplicate(brd_cond):
     brd_cond_dup = list(brd_cond).copy()
     for i in range(3):
         brd_cond_dup[i] = list(brd_cond)[i].copy()
     return tuple(brd_cond_dup)
 
-play()
+
+if __name__ == "__main__":
+    play()
